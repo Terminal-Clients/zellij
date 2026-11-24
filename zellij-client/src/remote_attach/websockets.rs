@@ -5,6 +5,7 @@ use std::pin::Pin;
 use std::sync::Arc;
 use std::task::{Context, Poll};
 use tokio::io::{AsyncRead, AsyncWrite, ReadBuf};
+use rustls_pki_types::pem::PemObject;
 use tokio::net::TcpStream;
 use tokio_tungstenite::WebSocketStream;
 
@@ -115,9 +116,8 @@ fn build_tls_config(
         Ok(Arc::new(config))
     } else if let Some(ca_path) = ca_cert {
         let ca_pem = std::fs::read(ca_path)?;
-        let mut cursor = std::io::Cursor::new(ca_pem);
         let certs: Vec<rustls_pki_types::CertificateDer<'static>> =
-            rustls_pemfile::certs(&mut cursor)
+            rustls_pki_types::CertificateDer::pem_slice_iter(&ca_pem)
                 .filter_map(|r| r.ok())
                 .collect();
         let mut root_store = rustls::RootCertStore::empty();

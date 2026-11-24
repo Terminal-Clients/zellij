@@ -40,7 +40,6 @@ isahc = { workspace = true }
 tokio-tungstenite = "0.28"
 rustls = { version = "0.23", default-features = false, features = ["std"] }
 tokio-rustls = "0.26"
-rustls-pemfile = "2"
 rustls-native-certs = "0.8"
 rustls-pki-types = "1"
 futures-util = "0.3"
